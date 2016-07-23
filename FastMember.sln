@@ -8,9 +8,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{289AB4
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastMember2", "FastMember\FastMember.csproj", "{3681AB91-8F99-41BE-93C6-FCE3C49704DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastMember", "FastMember\FastMember.csproj", "{3681AB91-8F99-41BE-93C6-FCE3C49704DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastMember.Tests2", "FastMember.Tests\FastMember.Tests.csproj", "{7DBF609A-72C4-4873-B055-091396547767}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastMember.Tests", "FastMember.Tests\FastMember.Tests.csproj", "{7DBF609A-72C4-4873-B055-091396547767}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3AFB623C-1720-474D-BDEE-809EA38738D4}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
