@@ -13,7 +13,7 @@ namespace FastMember
         Member[] members;
         internal MemberSet(Type type)
         {
-            members = type.GetProperties().Cast<MemberInfo>().Concat(type.GetFields().Cast<MemberInfo>()).OrderBy(x => x.Name)
+            members = type.GetProperties().Cast<MemberInfo>().Concat(type.GetFields().Cast<MemberInfo>()).OrderBy(x => x.Name, StringComparer.InvariantCulture)
                 .Select(member => new Member(member)).ToArray();
         }
         /// <summary>
@@ -51,7 +51,7 @@ namespace FastMember
         void ICollection<Member>.CopyTo(Member[] array, int arrayIndex) { members.CopyTo(array, arrayIndex); }
         bool ICollection<Member>.IsReadOnly { get { return true; } }
         int IList<Member>.IndexOf(Member member) { return Array.IndexOf<Member>(members, member); }
-        
+
     }
     /// <summary>
     /// Represents an abstracted view of an individual member defined for a type
@@ -74,9 +74,37 @@ namespace FastMember
         {
             get
             {
-                if(member is FieldInfo) return ((FieldInfo)member).FieldType;
-                if (member is PropertyInfo) return ((PropertyInfo)member).PropertyType;
-                throw new NotSupportedException(member.GetType().Name);
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field: return ((FieldInfo)member).FieldType;
+                    case MemberTypes.Property: return ((PropertyInfo)member).PropertyType;
+                    default: throw new NotSupportedException(member.MemberType.ToString());
+                }
+            }
+        }
+
+        public bool IsGettable
+        {
+            get
+            {
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field: return ((FieldInfo)member).IsPublic;
+                    case MemberTypes.Property: return ((PropertyInfo)member).CanRead;
+                    default: throw new NotSupportedException(member.MemberType.ToString());
+                }
+            }
+        }
+        public bool IsSettable
+        {
+            get
+            {
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field: return ((FieldInfo)member).IsPublic;
+                    case MemberTypes.Property: return ((PropertyInfo)member).CanWrite;
+                    default: throw new NotSupportedException(member.MemberType.ToString());
+                }
             }
         }
 
@@ -86,15 +114,7 @@ namespace FastMember
         public bool IsDefined(Type attributeType)
         {
             if (attributeType == null) throw new ArgumentNullException("attributeType");
-#if COREFX
-            foreach(var attrib in member.CustomAttributes)
-            {
-                if (attrib.AttributeType == attributeType) return true;
-            }
-            return false;
-#else
             return Attribute.IsDefined(member, attributeType);
-#endif
         }
 
 
